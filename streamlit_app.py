@@ -2,15 +2,17 @@ import json
 import os
 import streamlit as st
 
-st.title("College Saathi")
+# --- App Header ---
+st.title("College Saathi AI")
 st.subheader("PDA College of Engineering, Kalaburagi")
+st.caption("Hackathon Prototype Demo | Live 5th Sem AI & ML Academic Assistant")
+st.markdown("---")
 
-# Safely locate data directory
+# --- Load Data ---
 dir_name = os.path.abspath(os.path.dirname(__file__))
 data_folder = os.path.join(dir_name, "data")
 exams_path = os.path.join(data_folder, "exams.json")
 
-# Load JSON Data safely
 exam_data = {"exams": []}
 if os.path.exists(exams_path):
   try:
@@ -19,16 +21,17 @@ if os.path.exists(exams_path):
   except Exception:
     exam_data = {"exams": []}
 
+# --- Search Input ---
 user_query = st.text_input(
-    "Ask about exam dates. Just for now demo one." 
-    
+    "Search 5th Sem CIE-1 Schedule",
+    placeholder="Type 'DBMS', 'ML', 'Data Science', '22AI51', or 'HCI'...",
 )
 
+# --- Search Logic ---
 if user_query:
   matched_responses = []
   query_lower = user_query.strip().lower()
 
-  # Smart Acronym & Short-form mapping for PDA College subjects
   acronym_map = {
       "dbms": "database management system",
       "ml": "machine learning",
@@ -40,7 +43,6 @@ if user_query:
       "env": "environmental",
   }
 
-  # Expand search terms if user types a short form
   search_terms = [query_lower]
   if query_lower in acronym_map:
     search_terms.append(acronym_map[query_lower])
@@ -61,7 +63,7 @@ if user_query:
 
     if is_match:
       resp = (
-          f"📅 **Exam Found ({exam['semester']}):**\n\n"
+          f"**Exam Found ({exam['semester']}):**\n\n"
           f"- **Subject:** {exam['subject']} ({exam['code']})\n"
           f"- **Date:** {exam['date']}\n"
           f"- **Session:** {exam['session']}"
@@ -77,7 +79,7 @@ if user_query:
   else:
     st.markdown(
         "**[College Saathi AI]:** No matching record found for"
-        f" '{user_query}'. Try searching for 'DBMS', 'Machine Learning',"
-        " 'Data Science', or 'HCI'."
+        f" '{user_query}'. Try searching for 'DBMS', 'ML', 'Data"
+        " Science', or 'HCI'."
     )
     
