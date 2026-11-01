@@ -1,151 +1,59 @@
 import streamlit as st
-import pandas as pd
-import math
-from pathlib import Path
 
-# Set the title and favicon that appear in the Browser's tab bar.
-st.set_page_config(
-    page_title='GDP dashboard',
-    page_icon=':earth_americas:', # This is an emoji shortcode. Could be a URL too.
-)
+st.set_page_config(page_title="College Saathi - PDACE", page_icon="🎓")
 
-# -----------------------------------------------------------------------------
-# Declare some useful functions.
+st.title("🎓 College Saathi")
+st.subheader("PDA College of Engineering, Kalaburagi")
+st.caption("Your 24/7 AI Campus Assistant")
 
-@st.cache_data
-def get_gdp_data():
-    """Grab GDP data from a CSV file.
+# Sample PDACE knowledge base FAQs
+KNOWLEDGE_BASE = {
+    "cie": "The Continuous Internal Evaluation (CIE) exams for PDACE are conducted according to the academic calendar. Please check your department notice board for exact time slots.",
+    "cse": "The Computer Science and Engineering (CSE) department syllabus covers Data Structures, DBMS, AI/ML, OS, and Computer Networks under autonomous regulation.",
+    "fee": "Tuition fees can be paid online via the official college portal or through the administrative office counter.",
+    "placement": "The Smart Campus Placement Cell organizes training and campus recruitment drives for final and pre-final year students.",
+}
 
-    This uses caching to avoid having to read the file every time. If we were
-    reading from an HTTP endpoint instead of a file, it's a good idea to set
-    a maximum age to the cache with the TTL argument: @st.cache_data(ttl='1d')
-    """
+# Quick action buttons for PDACE students
+col1, col2 = st.columns(2)
+with col1:
+    if st.button("📅 CIE & Exam Schedule"):
+        st.session_state.prompt_input = "Tell me about CIE exam schedule"
+with col2:
+    if st.button("📚 CSE Syllabus & Notes"):
+        st.session_state.prompt_input = "What is the CSE syllabus?"
 
-    # Instead of a CSV on disk, you could read from an HTTP endpoint here too.
-    DATA_FILENAME = Path(__file__).parent/'data/gdp_data.csv'
-    raw_gdp_df = pd.read_csv(DATA_FILENAME)
+# Initialize chat session
+if "messages" not in st.session_state:
+    st.session_state.messages = []
 
-    MIN_YEAR = 1960
-    MAX_YEAR = 2022
+# Display message history
+for msg in st.session_state.messages:
+    with st.chat_message(msg["role"]):
+        st.markdown(msg["content"])
 
-    # The data above has columns like:
-    # - Country Name
-    # - Country Code
-    # - [Stuff I don't care about]
-    # - GDP for 1960
-    # - GDP for 1961
-    # - GDP for 1962
-    # - ...
-    # - GDP for 2022
-    #
-    # ...but I want this instead:
-    # - Country Name
-    # - Country Code
-    # - Year
-    # - GDP
-    #
-    # So let's pivot all those year-columns into two: Year and GDP
-    gdp_df = raw_gdp_df.melt(
-        ['Country Code'],
-        [str(x) for x in range(MIN_YEAR, MAX_YEAR + 1)],
-        'Year',
-        'GDP',
-    )
+# Handle user input
+user_query = st.chat_input("Ask about exams, circulars, or campus FAQs...")
 
-    # Convert years from string to integers
-    gdp_df['Year'] = pd.to_numeric(gdp_df['Year'])
+# Support button clicks
+if "prompt_input" in st.session_state and st.session_state.prompt_input:
+    user_query = st.session_state.prompt_input
+    st.session_state.prompt_input = ""
 
-    return gdp_df
+if user_query:
+    st.session_state.messages.append({"role": "user", "content": user_query})
+    with st.chat_message("user"):
+        st.markdown(user_query)
 
-gdp_df = get_gdp_data()
+    query_lower = user_query.lower()
+    bot_reply = "I'm College Saathi! I can help with PDACE CIE schedules, CSE syllabus, fees, and placement details. Could you specify your question?"
+    
+    for key, info in KNOWLEDGE_BASE.items():
+        if key in query_lower:
+            bot_reply = info
+            break
 
-# -----------------------------------------------------------------------------
-# Draw the actual page
-
-# Set the title that appears at the top of the page.
-'''
-# :earth_americas: GDP dashboard
-
-Browse GDP data from the [World Bank Open Data](https://data.worldbank.org/) website. As you'll
-notice, the data only goes to 2022 right now, and datapoints for certain years are often missing.
-But it's otherwise a great (and did I mention _free_?) source of data.
-'''
-
-# Add some spacing
-''
-''
-
-min_value = gdp_df['Year'].min()
-max_value = gdp_df['Year'].max()
-
-from_year, to_year = st.slider(
-    'Which years are you interested in?',
-    min_value=min_value,
-    max_value=max_value,
-    value=[min_value, max_value])
-
-countries = gdp_df['Country Code'].unique()
-
-if not len(countries):
-    st.warning("Select at least one country")
-
-selected_countries = st.multiselect(
-    'Which countries would you like to view?',
-    countries,
-    ['DEU', 'FRA', 'GBR', 'BRA', 'MEX', 'JPN'])
-
-''
-''
-''
-
-# Filter the data
-filtered_gdp_df = gdp_df[
-    (gdp_df['Country Code'].isin(selected_countries))
-    & (gdp_df['Year'] <= to_year)
-    & (from_year <= gdp_df['Year'])
-]
-
-st.header('GDP over time', divider='gray')
-
-''
-
-st.line_chart(
-    filtered_gdp_df,
-    x='Year',
-    y='GDP',
-    color='Country Code',
-)
-
-''
-''
-
-
-first_year = gdp_df[gdp_df['Year'] == from_year]
-last_year = gdp_df[gdp_df['Year'] == to_year]
-
-st.header(f'GDP in {to_year}', divider='gray')
-
-''
-
-cols = st.columns(4)
-
-for i, country in enumerate(selected_countries):
-    col = cols[i % len(cols)]
-
-    with col:
-        first_gdp = first_year[first_year['Country Code'] == country]['GDP'].iat[0] / 1000000000
-        last_gdp = last_year[last_year['Country Code'] == country]['GDP'].iat[0] / 1000000000
-
-        if math.isnan(first_gdp):
-            growth = 'n/a'
-            delta_color = 'off'
-        else:
-            growth = f'{last_gdp / first_gdp:,.2f}x'
-            delta_color = 'normal'
-
-        st.metric(
-            label=f'{country} GDP',
-            value=f'{last_gdp:,.0f}B',
-            delta=growth,
-            delta_color=delta_color
-        )
+    with st.chat_message("assistant"):
+        st.markdown(f"**[College Saathi AI]:** {bot_reply}")
+    st.session_state.messages.append({"role": "assistant", "content": f"**[College Saathi AI]:** {bot_reply}"})
+    
