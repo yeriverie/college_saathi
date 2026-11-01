@@ -5,17 +5,20 @@ import streamlit as st
 st.title("College Saathi")
 st.subheader("PDA College of Engineering, Kalaburagi")
 
-# Load your notices.json dataset safely
+# Define path safely
 dir_name = os.path.abspath(os.path.dirname(__file__))
-data_path = os.path.join(dir_name, "notices.json")
+data_folder = os.path.join(dir_name, "data")
+exams_path = os.path.join(data_folder, "exams.json")
 
-if os.path.exists(data_path):
-  with open(data_path, "r", encoding="utf-8") as f:
-    knowledge_base = json.load(f)
-else:
-  knowledge_base = {"faqs": []}
+# Load Exams JSON with safety check
+exam_data = {"exams": []}
+if os.path.exists(exams_path):
+  try:
+    with open(exams_path, "r", encoding="utf-8") as f:
+      exam_data = json.load(f)
+  except Exception:
+    exam_data = {"exams": []}
 
-# Chat input box
 user_query = st.text_input("Ask about exam dates, subjects, or schedule...")
 
 if user_query:
@@ -23,7 +26,6 @@ if user_query:
   query_lower = user_query.lower()
 
   for exam in exam_data.get("exams", []):
-    # Check if any keyword from the query matches the subject or code
     if (
         query_lower in exam["subject"].lower()
         or query_lower in exam["code"].lower()
