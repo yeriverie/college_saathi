@@ -20,8 +20,8 @@ if os.path.exists(exams_path):
     exam_data = {"exams": []}
 
 user_query = st.text_input(
-    "Ask about exam dates, subjects, or schedule (e.g., DBMS, Machine"
-    " Learning)..."
+    "Ask about exam dates. Just for now demo one." 
+    
 )
 
 if user_query:
