@@ -1,0 +1,16 @@
+{
+  "faqs": [
+    {
+      "question": "What is the CSE syllabus?",
+      "answer": "The Computer Science and Engineering department covers Data Structures, DBMS, AI/ML, Operating Systems, and Computer Networks under autonomous regulation."
+    },
+    {
+      "question": "When are CIE exams?",
+      "answer": "Continuous Internal Evaluation (CIE) examinations span across a multi-day test cycle as per the PDA College academic calendar."
+    },
+    {
+      "question": "Where is the CSE department?",
+      "answer": "The CSE Department is located on the main campus of PDA College of Engineering, Kalaburagi."
+    }
+  ]
+}
