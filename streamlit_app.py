@@ -22,29 +22,31 @@ if os.path.exists(exams_path):
 user_query = st.text_input("Ask about exam dates, subjects, or schedule...")
 
 if user_query:
-  matched_response = None
+  matched_responses = []
   query_lower = user_query.lower()
 
+  # Search through every exam in the list
   for exam in exam_data.get("exams", []):
     if (
         query_lower in exam["subject"].lower()
         or query_lower in exam["code"].lower()
         or query_lower in exam["semester"].lower()
     ):
-      matched_response = (
+      matched_responses.append(
           f"📅 **Exam Found ({exam['semester']}):**\n\n"
           f"- **Subject:** {exam['subject']} ({exam['code']})\n"
           f"- **Date:** {exam['date']}\n"
           f"- **Session:** {exam['session']}"
       )
-      break
 
-  if matched_response:
-    st.markdown(f"**[College Saathi AI]:**\n\n{matched_response}")
+  if matched_responses:
+    # Display all matching results found
+    for resp in matched_responses:
+      st.markdown(f"**[College Saathi AI]:**\n\n{resp}")
   else:
     st.markdown(
-        "**[College Saathi AI]:** No matching record found. Try typing part of"
-        " the subject name like 'Data Science', 'Machine Learning', or"
-        " 'DBMS'."
+        "**[College Saathi AI]:** No matching record found. Try searching for"
+        " 'Data Science', 'Machine Learning', 'DBMS', 'HCI', 'Research',"
+        " or 'Environmental'."
     )
     
