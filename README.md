@@ -1,4 +1,10 @@
 
-https://college-saathi-pdace.streamlit.app/ 
+# College Saathi AI
+### PDA College of Engineering, Kalaburagi
+*Hackathon Prototype Demo Portal*
 
-RUN THIS APP. 
+---
+
+Click the link below to launch the live interactive assistant:
+
+[>> RUN LIVE APP <<](https://college-saathi-pdace.streamlit.app/)
