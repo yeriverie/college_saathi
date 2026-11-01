@@ -2,13 +2,89 @@ import json
 import os
 import streamlit as st
 
-# --- App Header ---
-st.title("College Saathi AI")
-st.subheader("PDA College of Engineering, Kalaburagi")
-st.caption("Hackathon Prototype Demo | Live 5th Sem AI & ML Academic Assistant")
-st.markdown("---")
+# Set page layout
+st.set_page_config(
+    page_title="College Saathi AI",
+    layout="centered",
+    initial_sidebar_state="collapsed",
+)
 
-# --- Load Data ---
+# Custom CSS for modern dark theme styling without emojis
+st.markdown(
+    """
+    <style>
+    .main {
+        background-color: #0e1117;
+        font-family: 'Inter', sans-serif;
+    }
+    .header-box {
+        background: linear-gradient(135deg, #1e2640 0%, #0f172a 100%);
+        padding: 24px;
+        border-radius: 12px;
+        border: 1px solid #334155;
+        margin-bottom: 25px;
+    }
+    .header-title {
+        color: #ffffff;
+        font-size: 26px;
+        font-weight: 700;
+        margin: 0;
+    }
+    .header-subtitle {
+        color: #94a3b8;
+        font-size: 15px;
+        margin-top: 5px;
+    }
+    .badge {
+        display: inline-block;
+        background-color: #2563eb;
+        color: #ffffff;
+        font-size: 11px;
+        font-weight: 600;
+        padding: 3px 8px;
+        border-radius: 9999px;
+        margin-top: 10px;
+        text-transform: uppercase;
+    }
+    .exam-card {
+        background-color: #1e293b;
+        border-left: 4px solid #3b82f6;
+        padding: 18px;
+        border-radius: 8px;
+        margin-bottom: 15px;
+        border-top: 1px solid #334155;
+        border-right: 1px solid #334155;
+        border-bottom: 1px solid #334155;
+    }
+    .exam-title {
+        color: #60a5fa;
+        font-size: 17px;
+        font-weight: 600;
+        margin-bottom: 8px;
+    }
+    .exam-detail {
+        color: #e2e8f0;
+        font-size: 14px;
+        margin: 4px 0;
+    }
+    </style>
+""",
+    unsafe_allow_html=True,
+)
+
+# --- App Header ---
+st.markdown(
+    """
+    <div class="header-box">
+        <div class="header-title">College Saathi AI</div>
+        <div class="header-subtitle">PDA College of Engineering, Kalaburagi</div>
+        <span class="badge">Hackathon Prototype Demo | Live 5th Sem AI & ML</span>
+    </div>
+""",
+    unsafe_allow_html=True,
+)
+
+# --- Load Data Safely ---
 dir_name = os.path.abspath(os.path.dirname(__file__))
 data_folder = os.path.join(dir_name, "data")
 exams_path = os.path.join(data_folder, "exams.json")
@@ -62,24 +138,26 @@ if user_query:
         break
 
     if is_match:
-      resp = (
-          f"**Exam Found ({exam['semester']}):**\n\n"
-          f"- **Subject:** {exam['subject']} ({exam['code']})\n"
-          f"- **Date:** {exam['date']}\n"
-          f"- **Session:** {exam['session']}"
-      )
-      if resp not in matched_responses:
-        matched_responses.append(resp)
+      card_html = f"""
+        <div class="exam-card">
+            <div class="exam-title">Exam Found ({exam['semester']})</div>
+            <div class="exam-detail"><strong>Subject:</strong> {exam['subject']} ({exam['code']})</div>
+            <div class="exam-detail"><strong>Date:</strong> {exam['date']}</div>
+            <div class="exam-detail"><strong>Session:</strong> {exam['session']}</div>
+        </div>
+        """
+      if card_html not in matched_responses:
+        matched_responses.append(card_html)
 
+  st.markdown(
+      "**[College Saathi AI]:**",
+  )
   if matched_responses:
-    st.markdown("**[College Saathi AI]:**")
     for resp in matched_responses:
-      st.markdown(resp)
-      st.markdown("---")
+      st.markdown(resp, unsafe_allow_html=True)
   else:
-    st.markdown(
-        "**[College Saathi AI]:** No matching record found for"
-        f" '{user_query}'. Try searching for 'DBMS', 'ML', 'Data"
-        " Science', or 'HCI'."
+    st.error(
+        f"No matching record found for '{user_query}'. Try searching for"
+        " 'DBMS', 'ML', 'Data Science', or 'HCI'."
     )
     
