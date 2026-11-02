@@ -9,7 +9,7 @@ st.set_page_config(
     initial_sidebar_state="collapsed",
 )
 
-# --- Custom Styling (Dark Theme & Clean Chat Cards) ---
+# --- Custom Dark Theme & Clean Card Styling ---
 st.markdown(
     """
     <style>
@@ -79,7 +79,7 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-# --- App Header ---
+# --- Header ---
 st.markdown(
     """
     <div class="header-box">
@@ -91,132 +91,22 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-# --- Load Dataset Safely ---
+# --- Load Master JSON Safely ---
 dir_name = os.path.abspath(os.path.dirname(__file__))
-data_folder = os.path.join(dir_name, "data")
-json_path = os.path.join(data_folder, "campus_data.json")
+data_path = os.path.join(dir_name, "data", "campus_data.json")
 
-default_data = {
-    "institution": "P.D.A. College of Engineering",
-    "website": "pdacek.ac.in",
-    "portals": {
-        "results": "https://pda-results.contineo.in/index.php",
-        "general_webfiles": "https://pda-students.contineo.in/webfiles/",
-        "terms": {
-            "odd_semester": "https://pda-students.contineo.in/parents/",
-            "even_semester": "https://pda-students.contineo.in/parentseven/index.php",
-            "summer_term": (
-                "https://pda-students.contineo.in/parentssummer/index.php"
-            ),
-        },
-    },
-    "exams": [
-        {
-            "semester": "V Semester AI & ML",
-            "subject": "Data Science & Its Applications",
-            "code": "22AI51",
-            "date": "29/10/2026",
-            "session": "11:30 AM to 12:45 PM",
-        },
-        {
-            "semester": "V Semester AI & ML",
-            "subject": "Database Management System",
-            "code": "22AI52",
-            "date": "29/10/2026",
-            "session": "04:00 PM to 05:15 PM",
-        },
-        {
-            "semester": "V Semester AI & ML",
-            "subject": "Principles of Machine Learning",
-            "code": "22AI53",
-            "date": "30/10/2026",
-            "session": "11:30 AM to 12:45 PM",
-        },
-        {
-            "semester": "V Semester AI & ML",
-            "subject": "Human Computer Interface",
-            "code": "22AI55A",
-            "date": "30/10/2026",
-            "session": "04:00 PM to 05:15 PM",
-        },
-        {
-            "semester": "V Semester AI & ML",
-            "subject": "Research Methodology and IPR",
-            "code": "22RM157",
-            "date": "31/10/2026",
-            "session": "11:30 AM to 12:45 PM",
-        },
-        {
-            "semester": "V Semester AI & ML",
-            "subject": "Environmental Studies",
-            "code": "22ES58",
-            "date": "31/10/2026",
-            "session": "04:00 PM to 05:15 PM",
-        },
-    ],
-    "fee_structure": {
-        "management_quota_fees_per_year": [
-            {
-                "course": (
-                    "Artificial Intelligence and Machine Learning (AIML)"
-                ),
-                "fees_per_year": 250000,
-            },
-            {
-                "course": "Computer Science Engineering (CSE)",
-                "fees_per_year": 250000,
-            },
-        ],
-        "comedk_fee_structure": [
-            {
-                "course": (
-                    "Artificial Intelligence and Machine Learning (AIML)"
-                ),
-                "tuition_fee": 186000,
-                "other_fee": 20000,
-                "university_fee_payable_at_college": 10610,
-                "total_fee": 216610,
-            },
-            {
-                "course": "Computer Science Engineering (CSE)",
-                "tuition_fee": 186000,
-                "other_fee": 20000,
-                "university_fee_payable_at_college": 10610,
-                "total_fee": 216610,
-            },
-        ],
-    },
-    "syllabus": {
-        "aiml": [
-            "Data Science & Its Applications (22AI51)",
-            "Database Management System (22AI52)",
-            "Principles of Machine Learning (22AI53)",
-            "Human Computer Interface (22AI55A)",
-            "Research Methodology and IPR (22RM157)",
-            "Environmental Studies (22ES58)",
-        ],
-        "cse": [
-            "Data Structures & Algorithms",
-            "Design & Analysis of Algorithms",
-            "Operating Systems",
-            "Computer Networks",
-            "Database Management Systems",
-        ],
-    },
-}
-
-campus_data = default_data
-if os.path.exists(json_path):
+campus_data = {}
+if os.path.exists(data_path):
   try:
-    with open(json_path, "r", encoding="utf-8") as f:
+    with open(data_path, "r", encoding="utf-8") as f:
       campus_data = json.load(f)
   except Exception:
-    campus_data = default_data
+    campus_data = {}
 
-# --- Real Chatbot Interface ---
+# --- Single Input Chat Interface ---
 st.markdown("### Ask College Saathi")
 user_query = st.text_input(
-    "Ask anything about exams, fees, syllabus, or portals...",
+    "Ask anything about exams, fees, syllabus, or login links...",
     placeholder=(
         "Try 'AIML fee', 'CSE syllabus', 'result link', or 'odd sem login'..."
     ),
@@ -228,7 +118,7 @@ if user_query:
 
   st.markdown("**[College Saathi AI]:**")
 
-  # INTENT 1: FEE STRUCTURE (AIML or CSE)
+  # 1. ROUTE: FEE STRUCTURE
   if "fee" in query_lower:
     response_found = True
     fees = campus_data.get("fee_structure", {})
@@ -239,7 +129,7 @@ if user_query:
           " (AIML):"
       )
       for item in fees.get("management_quota_fees_per_year", []):
-        if "Artificial Intelligence" in item["course"]:
+        if "Artificial Intelligence" in item.get("course", ""):
           st.markdown(
               f"""
                 <div class="card">
@@ -250,7 +140,7 @@ if user_query:
               unsafe_allow_html=True,
           )
       for item in fees.get("comedk_fee_structure", []):
-        if "Artificial Intelligence" in item["course"]:
+        if "Artificial Intelligence" in item.get("course", ""):
           st.markdown(
               f"""
                 <div class="card">
@@ -267,7 +157,7 @@ if user_query:
     elif "cse" in query_lower or "computer science" in query_lower:
       st.markdown("Fee Structure for Computer Science Engineering (CSE):")
       for item in fees.get("management_quota_fees_per_year", []):
-        if "Computer Science Engineering" in item["course"]:
+        if "Computer Science Engineering" in item.get("course", ""):
           st.markdown(
               f"""
                 <div class="card">
@@ -278,7 +168,7 @@ if user_query:
               unsafe_allow_html=True,
           )
       for item in fees.get("comedk_fee_structure", []):
-        if "Computer Science Engineering" in item["course"]:
+        if "Computer Science Engineering" in item.get("course", ""):
           st.markdown(
               f"""
                 <div class="card">
@@ -292,40 +182,43 @@ if user_query:
               unsafe_allow_html=True,
           )
     else:
-      st.markdown("General Institutional Fee Overview:")
-      st.markdown(
-          """
-            <div class="card">
-                <div class="card-title">KCET Aided / Un-Aided</div>
-                <div class="card-detail">Please specify your branch (e.g., 'AIML fee' or 'CSE fee') to view specific quota breakdowns.</div>
-            </div>
-            """,
-          unsafe_allow_html=True,
-      )
+      st.markdown("Institutional Fee Overview:")
+      for item in fees.get("kcet_fee_structure", []):
+        st.markdown(
+            f"""
+                <div class="card">
+                    <div class="card-title">{item['category']}</div>
+                    <div class="card-detail"><strong>Total Fee:</strong> INR {item['total_fee']:,}</div>
+                </div>
+                """,
+            unsafe_allow_html=True,
+        )
 
-  # INTENT 2: SYLLABUS (AIML or CSE)
+  # 2. ROUTE: SYLLABUS & CURRICULUM
   elif "syllabus" in query_lower or "subject" in query_lower:
     response_found = True
     syllabus = campus_data.get("syllabus", {})
 
     if "aiml" in query_lower or "artificial intelligence" in query_lower:
-      subs = "\n".join([f"- {sub}" for sub in syllabus.get("aiml", [])])
+      subs = "<br>".join(
+          [f"- {sub}" for sub in syllabus.get("aiml_v_sem", [])]
+      )
       st.markdown(
           f"""
             <div class="card">
                 <div class="card-title">AIML Curriculum & Subjects (V Semester)</div>
-                <div class="card-detail">{subs.replace(chr(10), '<br>')}</div>
+                <div class="card-detail">{subs}</div>
             </div>
             """,
           unsafe_allow_html=True,
       )
     elif "cse" in query_lower or "computer science" in query_lower:
-      subs = "\n".join([f"- {sub}" for sub in syllabus.get("cse", [])])
+      subs = "<br>".join([f"- {sub}" for sub in syllabus.get("cse", [])])
       st.markdown(
           f"""
             <div class="card">
                 <div class="card-title">CSE Curriculum & Subjects</div>
-                <div class="card-detail">{subs.replace(chr(10), '<br>')}</div>
+                <div class="card-detail">{subs}</div>
             </div>
             """,
           unsafe_allow_html=True,
@@ -335,13 +228,13 @@ if user_query:
           """
             <div class="card">
                 <div class="card-title">Curriculum Directory</div>
-                <div class="card-detail">Please specify branch like 'AIML syllabus' or 'CSE syllabus'.</div>
+                <div class="card-detail">Please specify branch (e.g., 'AIML syllabus' or 'CSE syllabus').</div>
             </div>
             """,
           unsafe_allow_html=True,
       )
 
-  # INTENT 3: PORTALS, RESULTS & LOGIN (Contineo Links)
+  # 3. ROUTE: PORTALS & CONTINEOS
   elif (
       "login" in query_lower
       or "result" in query_lower
@@ -367,14 +260,23 @@ if user_query:
         unsafe_allow_html=True,
     )
 
-  # INTENT 4: EXAMS & SCHEDULES
-  elif "exam" in query_lower or "date" in query_lower or "schedule" in query_lower:
+  # 4. ROUTE: EXAMS & TIMETABLE
+  elif (
+      "exam" in query_lower
+      or "date" in query_lower
+      or "schedule" in query_lower
+      or any(
+          k in query_lower
+          for k in ["dbms", "ml", "ds", "hci", "rm", "ipr", "es"]
+      )
+  ):
     response_found = True
     for exam in campus_data.get("exams", []):
       st.markdown(
           f"""
             <div class="card">
                 <div class="card-title">{exam['subject']} ({exam['code']})</div>
+                <div class="card-detail"><strong>Semester:</strong> {exam['semester']}</div>
                 <div class="card-detail"><strong>Date:</strong> {exam['date']}</div>
                 <div class="card-detail"><strong>Session:</strong> {exam['session']}</div>
             </div>
