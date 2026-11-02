@@ -67,6 +67,13 @@ st.markdown(
         font-size: 14px;
         margin: 4px 0;
     }
+    a {
+        color: #60a5fa;
+        text-decoration: none;
+    }
+    a:hover {
+        text-decoration: underline;
+    }
     </style>
 """,
     unsafe_allow_html=True,
@@ -148,47 +155,52 @@ default_data = {
         },
     ],
     "fee_structure": {
-        "kcet_fee_structure": [
-            {
-                "category": "KCET (Un-Aided Course)",
-                "total_fee": 130956,
-                "tuition_fee": 85346,
-                "other_fee": 20000,
-            },
-            {
-                "category": "KCET (Aided Course)",
-                "total_fee": 67866,
-                "tuition_fee": 22256,
-                "other_fee": 20000,
-            },
-        ],
         "management_quota_fees_per_year": [
             {
-                "course": "Computer Science Engineering",
-                "fees_per_year": 250000,
-            },
-            {
                 "course": (
-                    "Artificial Intelligence and Machine Learning"
+                    "Artificial Intelligence and Machine Learning (AIML)"
                 ),
                 "fees_per_year": 250000,
             },
-            {"course": "Civil Engineering", "fees_per_year": 140000},
-            {"course": "Mechanical Engineering", "fees_per_year": 140000},
+            {
+                "course": "Computer Science Engineering (CSE)",
+                "fees_per_year": 250000,
+            },
         ],
         "comedk_fee_structure": [
             {
-                "course": "Computer Science Engineering",
-                "total_fee": 216610,
+                "course": (
+                    "Artificial Intelligence and Machine Learning (AIML)"
+                ),
                 "tuition_fee": 186000,
+                "other_fee": 20000,
+                "university_fee_payable_at_college": 10610,
+                "total_fee": 216610,
             },
             {
-                "course": (
-                    "Artificial Intelligence and Machine Learning"
-                ),
-                "total_fee": 216610,
+                "course": "Computer Science Engineering (CSE)",
                 "tuition_fee": 186000,
+                "other_fee": 20000,
+                "university_fee_payable_at_college": 10610,
+                "total_fee": 216610,
             },
+        ],
+    },
+    "syllabus": {
+        "aiml": [
+            "Data Science & Its Applications (22AI51)",
+            "Database Management System (22AI52)",
+            "Principles of Machine Learning (22AI53)",
+            "Human Computer Interface (22AI55A)",
+            "Research Methodology and IPR (22RM157)",
+            "Environmental Studies (22ES58)",
+        ],
+        "cse": [
+            "Data Structures & Algorithms",
+            "Design & Analysis of Algorithms",
+            "Operating Systems",
+            "Computer Networks",
+            "Database Management Systems",
         ],
     },
 }
@@ -204,10 +216,9 @@ if os.path.exists(json_path):
 # --- Real Chatbot Interface ---
 st.markdown("### Ask College Saathi")
 user_query = st.text_input(
-    "Ask anything about exams, fees, or login links...",
+    "Ask anything about exams, fees, syllabus, or portals...",
     placeholder=(
-        "Try typing 'AIML fee', 'CSE fee', 'DBMS exam', 'results', or 'odd sem"
-        " login'..."
+        "Try 'AIML fee', 'CSE syllabus', 'result link', or 'odd sem login'..."
     ),
 )
 
@@ -217,129 +228,126 @@ if user_query:
 
   st.markdown("**[College Saathi AI]:**")
 
-  # 1. Check for Exams & Acronyms
-  acronym_map = {
-      "dbms": "database management system",
-      "ml": "machine learning",
-      "ds": "data science",
-      "hci": "human computer interface",
-      "rm": "research methodology",
-      "ipr": "ipr",
-      "es": "environmental",
-      "env": "environmental",
-  }
-  search_terms = [query_lower]
-  if query_lower in acronym_map:
-    search_terms.append(acronym_map[query_lower])
+  # INTENT 1: FEE STRUCTURE (AIML or CSE)
+  if "fee" in query_lower:
+    response_found = True
+    fees = campus_data.get("fee_structure", {})
 
-  for exam in campus_data.get("exams", []):
-    subject_lower = exam["subject"].lower()
-    code_lower = exam["code"].lower()
-    is_match = False
-    for term in search_terms:
-      if (
-          term in subject_lower
-          or term in code_lower
-          or any(w in subject_lower for w in term.split())
-      ):
-        is_match = True
-        break
-
-    if is_match:
-      response_found = True
+    if "aiml" in query_lower or "artificial intelligence" in query_lower:
       st.markdown(
-          f"""
+          "Fee Structure for Artificial Intelligence and Machine Learning"
+          " (AIML):"
+      )
+      for item in fees.get("management_quota_fees_per_year", []):
+        if "Artificial Intelligence" in item["course"]:
+          st.markdown(
+              f"""
+                <div class="card">
+                    <div class="card-title">Management Quota</div>
+                    <div class="card-detail"><strong>Annual Fee:</strong> INR {item['fees_per_year']:,}</div>
+                </div>
+                """,
+              unsafe_allow_html=True,
+          )
+      for item in fees.get("comedk_fee_structure", []):
+        if "Artificial Intelligence" in item["course"]:
+          st.markdown(
+              f"""
+                <div class="card">
+                    <div class="card-title">COMEDK Quota</div>
+                    <div class="card-detail"><strong>Tuition Fee:</strong> INR {item['tuition_fee']:,}</div>
+                    <div class="card-detail"><strong>Other Fee:</strong> INR {item['other_fee']:,}</div>
+                    <div class="card-detail"><strong>University Fee:</strong> INR {item['university_fee_payable_at_college']:,}</div>
+                    <div class="card-detail" style="color: #60a5fa; margin-top: 6px;"><strong>Total Fee:</strong> INR {item['total_fee']:,}</div>
+                </div>
+                """,
+              unsafe_allow_html=True,
+          )
+
+    elif "cse" in query_lower or "computer science" in query_lower:
+      st.markdown("Fee Structure for Computer Science Engineering (CSE):")
+      for item in fees.get("management_quota_fees_per_year", []):
+        if "Computer Science Engineering" in item["course"]:
+          st.markdown(
+              f"""
+                <div class="card">
+                    <div class="card-title">Management Quota</div>
+                    <div class="card-detail"><strong>Annual Fee:</strong> INR {item['fees_per_year']:,}</div>
+                </div>
+                """,
+              unsafe_allow_html=True,
+          )
+      for item in fees.get("comedk_fee_structure", []):
+        if "Computer Science Engineering" in item["course"]:
+          st.markdown(
+              f"""
+                <div class="card">
+                    <div class="card-title">COMEDK Quota</div>
+                    <div class="card-detail"><strong>Tuition Fee:</strong> INR {item['tuition_fee']:,}</div>
+                    <div class="card-detail"><strong>Other Fee:</strong> INR {item['other_fee']:,}</div>
+                    <div class="card-detail"><strong>University Fee:</strong> INR {item['university_fee_payable_at_college']:,}</div>
+                    <div class="card-detail" style="color: #60a5fa; margin-top: 6px;"><strong>Total Fee:</strong> INR {item['total_fee']:,}</div>
+                </div>
+                """,
+              unsafe_allow_html=True,
+          )
+    else:
+      st.markdown("General Institutional Fee Overview:")
+      st.markdown(
+          """
             <div class="card">
-                <div class="card-title">Exam Found ({exam['semester']})</div>
-                <div class="card-detail"><strong>Subject:</strong> {exam['subject']} ({exam['code']})</div>
-                <div class="card-detail"><strong>Date:</strong> {exam['date']}</div>
-                <div class="card-detail"><strong>Session:</strong> {exam['session']}</div>
+                <div class="card-title">KCET Aided / Un-Aided</div>
+                <div class="card-detail">Please specify your branch (e.g., 'AIML fee' or 'CSE fee') to view specific quota breakdowns.</div>
             </div>
             """,
           unsafe_allow_html=True,
       )
 
-  # 2. Check for Fee Structure (AIML, CSE, Management, KCET, COMEDK)
-  if "fee" in query_lower:
+  # INTENT 2: SYLLABUS (AIML or CSE)
+  elif "syllabus" in query_lower or "subject" in query_lower:
     response_found = True
-    fees = campus_data.get("fee_structure", {})
+    syllabus = campus_data.get("syllabus", {})
 
-    # Specific check for AIML or CSE
     if "aiml" in query_lower or "artificial intelligence" in query_lower:
+      subs = "\n".join([f"- {sub}" for sub in syllabus.get("aiml", [])])
       st.markdown(
-          "**Fee details for Artificial Intelligence and Machine Learning:**"
+          f"""
+            <div class="card">
+                <div class="card-title">AIML Curriculum & Subjects (V Semester)</div>
+                <div class="card-detail">{subs.replace(chr(10), '<br>')}</div>
+            </div>
+            """,
+          unsafe_allow_html=True,
       )
-      for item in fees.get("management_quota_fees_per_year", []):
-        if "Artificial Intelligence" in item["course"]:
-          st.markdown(
-              f"""
-                    <div class="card">
-                        <div class="card-title">Management Quota</div>
-                        <div class="card-detail"><strong>Course:</strong> {item['course']}</div>
-                        <div class="card-detail" style="color: #60a5fa;"><strong>Annual Fee:</strong> INR {item['fees_per_year']:,}</div>
-                    </div>
-                    """,
-              unsafe_allow_html=True,
-          )
-      for item in fees.get("comedk_fee_structure", []):
-        if "Artificial Intelligence" in item["course"]:
-          st.markdown(
-              f"""
-                    <div class="card">
-                        <div class="card-title">COMEDK Quota</div>
-                        <div class="card-detail"><strong>Course:</strong> {item['course']}</div>
-                        <div class="card-detail" style="color: #60a5fa;"><strong>Total Fee:</strong> INR {item['total_fee']:,}</div>
-                    </div>
-                    """,
-              unsafe_allow_html=True,
-          )
-
     elif "cse" in query_lower or "computer science" in query_lower:
-      st.markdown("**Fee details for Computer Science Engineering:**")
-      for item in fees.get("management_quota_fees_per_year", []):
-        if "Computer Science Engineering" in item["course"]:
-          st.markdown(
-              f"""
-                    <div class="card">
-                        <div class="card-title">Management Quota</div>
-                        <div class="card-detail"><strong>Course:</strong> {item['course']}</div>
-                        <div class="card-detail" style="color: #60a5fa;"><strong>Annual Fee:</strong> INR {item['fees_per_year']:,}</div>
-                    </div>
-                    """,
-              unsafe_allow_html=True,
-          )
-      for item in fees.get("comedk_fee_structure", []):
-        if "Computer Science Engineering" in item["course"]:
-          st.markdown(
-              f"""
-                    <div class="card">
-                        <div class="card-title">COMEDK Quota</div>
-                        <div class="card-detail"><strong>Course:</strong> {item['course']}</div>
-                        <div class="card-detail" style="color: #60a5fa;"><strong>Total Fee:</strong> INR {item['total_fee']:,}</div>
-                    </div>
-                    """,
-              unsafe_allow_html=True,
-          )
+      subs = "\n".join([f"- {sub}" for sub in syllabus.get("cse", [])])
+      st.markdown(
+          f"""
+            <div class="card">
+                <div class="card-title">CSE Curriculum & Subjects</div>
+                <div class="card-detail">{subs.replace(chr(10), '<br>')}</div>
+            </div>
+            """,
+          unsafe_allow_html=True,
+      )
     else:
-      # General fee summary if specific branch not named
-      st.markdown("Here is the general institutional fee overview:")
-      for item in fees.get("kcet_fee_structure", []):
-        st.markdown(
-            f"""
-                <div class="card">
-                    <div class="card-title">{item['category']}</div>
-                    <div class="card-detail"><strong>Total Fee:</strong> INR {item['total_fee']:,}</div>
-                </div>
-                """,
-            unsafe_allow_html=True,
-        )
+      st.markdown(
+          """
+            <div class="card">
+                <div class="card-title">Curriculum Directory</div>
+                <div class="card-detail">Please specify branch like 'AIML syllabus' or 'CSE syllabus'.</div>
+            </div>
+            """,
+          unsafe_allow_html=True,
+      )
 
-  # 3. Check for Portals / Login Links (Results, Odd Sem, Even Sem)
-  if (
+  # INTENT 3: PORTALS, RESULTS & LOGIN (Contineo Links)
+  elif (
       "login" in query_lower
       or "result" in query_lower
-      or "sem" in query_lower
+      or "contineo" in query_lower
       or "portal" in query_lower
+      or "sem" in query_lower
   ):
     response_found = True
     portals = campus_data.get("portals", {})
@@ -348,31 +356,45 @@ if user_query:
     st.markdown(
         f"""
         <div class="card">
-            <div class="card-title">Official Institutional Links Found</div>
-            <div class="card-detail">- Examination Results: <a href="{portals.get('results')}" target="_blank">Open Result Portal</a></div>
-            <div class="card-detail">- Odd Semester Login: <a href="{terms.get('odd_semester')}" target="_blank">Open Odd Sem Portal</a></div>
-            <div class="card-detail">- Even Semester Login: <a href="{terms.get('even_semester')}" target="_blank">Open Even Sem Portal</a></div>
-            <div class="card-detail">- General Webfiles: <a href="{portals.get('general_webfiles')}" target="_blank">Open Webfiles Directory</a></div>
+            <div class="card-title">Official Contineo & Student Portals</div>
+            <div class="card-detail">- <strong>Examination Results:</strong> <a href="{portals.get('results')}" target="_blank">Open Result Portal</a></div>
+            <div class="card-detail">- <strong>Odd Semester Login:</strong> <a href="{terms.get('odd_semester')}" target="_blank">Open Odd Semester Portal</a></div>
+            <div class="card-detail">- <strong>Even Semester Login:</strong> <a href="{terms.get('even_semester')}" target="_blank">Open Even Semester Portal</a></div>
+            <div class="card-detail">- <strong>Summer Term Login:</strong> <a href="{terms.get('summer_term')}" target="_blank">Open Summer Term Portal</a></div>
+            <div class="card-detail">- <strong>General Webfiles:</strong> <a href="{portals.get('general_webfiles')}" target="_blank">Open Webfiles Directory</a></div>
         </div>
         """,
         unsafe_allow_html=True,
     )
 
+  # INTENT 4: EXAMS & SCHEDULES
+  elif "exam" in query_lower or "date" in query_lower or "schedule" in query_lower:
+    response_found = True
+    for exam in campus_data.get("exams", []):
+      st.markdown(
+          f"""
+            <div class="card">
+                <div class="card-title">{exam['subject']} ({exam['code']})</div>
+                <div class="card-detail"><strong>Date:</strong> {exam['date']}</div>
+                <div class="card-detail"><strong>Session:</strong> {exam['session']}</div>
+            </div>
+            """,
+          unsafe_allow_html=True,
+      )
+
   if not response_found:
     st.error(
-        f"I searched institutional records for '{user_query}', but found no"
-        " direct match. Try asking about 'AIML fee', 'CSE fee', 'DBMS exam',"
-        " 'results', or 'login'."
+        f"No direct match for '{user_query}'. Try searching for 'AIML fee',"
+        " 'CSE syllabus', 'result link', or 'odd sem login'."
     )
 else:
-  # Default greeting/prompt when chat input is empty
   st.markdown(
       """
     <div class="card">
         <div class="card-title">Welcome to College Saathi AI</div>
-        <div class="card-detail">Type your query above to instantly retrieve exam timetables, fee structures for AIML/CSE, or official login portal links.</div>
+        <div class="card-detail">Ask about <strong>AIML/CSE fee structures</strong>, <strong>syllabus</strong>, <strong>exam schedules</strong>, or direct <strong>Contineo login links</strong>.</div>
     </div>
     """,
       unsafe_allow_html=True,
-)
+  )
       
