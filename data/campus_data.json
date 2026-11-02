@@ -55,6 +55,20 @@
     }
   ],
   "fee_structure": {
+    "kcet_fee_structure": [
+      {
+        "category": "KCET (Un-Aided Course)",
+        "tuition_fee": 85346,
+        "other_fee": 20000,
+        "total_fee": 130956
+      },
+      {
+        "category": "KCET (Aided Course)",
+        "tuition_fee": 22256,
+        "other_fee": 20000,
+        "total_fee": 67866
+      }
+    ],
     "management_quota_fees_per_year": [
       {
         "course": "Artificial Intelligence and Machine Learning (AIML)",
@@ -83,7 +97,7 @@
     ]
   },
   "syllabus": {
-    "aiml": [
+    "aiml_v_sem": [
       "Data Science & Its Applications (22AI51)",
       "Database Management System (22AI52)",
       "Principles of Machine Learning (22AI53)",
