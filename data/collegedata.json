@@ -1,0 +1,201 @@
+{
+"institution": "P.D.A. College of Engineering",
+"website": "pdacek.ac.in",
+"portals": {
+"results": "https://pda-results.contineo.in/index.php",
+"general_webfiles": "https://pda-students.contineo.in/webfiles/",
+"terms": {
+"odd_semester": "https://pda-students.contineo.in/parents/",
+"even_semester": "https://pda-students.contineo.in/parentseven/index.php",
+"summer_term": "https://pda-students.contineo.in/parentssummer/index.php"
+}
+},
+"exams": [
+{
+"semester": "V Semester AI & ML",
+"subject": "Data Science & Its Applications",
+"code": "22AI51",
+"date": "29/10/2026",
+"session": "11:30 AM to 12:45 PM"
+},
+{
+"semester": "V Semester AI & ML",
+"subject": "Database Management System",
+"code": "22AI52",
+"date": "29/10/2026",
+"session": "04:00 PM to 05:15 PM"
+},
+{
+"semester": "V Semester AI & ML",
+"subject": "Principles of Machine Learning",
+"code": "22AI53",
+"date": "30/10/2026",
+"session": "11:30 AM to 12:45 PM"
+},
+{
+"semester": "V Semester AI & ML",
+"subject": "Human Computer Interface",
+"code": "22AI55A",
+"date": "30/10/2026",
+"session": "04:00 PM to 05:15 PM"
+},
+{
+"semester": "V Semester AI & ML",
+"subject": "Research Methodology and IPR",
+"code": "22RM157",
+"date": "31/10/2026",
+"session": "11:30 AM to 12:45 PM"
+},
+{
+"semester": "V Semester AI & ML",
+"subject": "Environmental Studies",
+"code": "22ES58",
+"date": "31/10/2026",
+"session": "04:00 PM to 05:15 PM"
+}
+],
+"fee_structure": {
+"kcet_fee_structure": [
+{
+"category": "KCET (Un-Aided Course)",
+"sl_no": 1,
+"course": "All Courses",
+"tuition_fee": 85346,
+"other_fee": 20000,
+"fee_paid_in_comedk": 15000,
+"university_fee_payable_at_college": 10610,
+"total_fee": 130956
+},
+{
+"category": "KCET (Aided Course)",
+"sl_no": 1,
+"course": "All Courses",
+"tuition_fee": 22256,
+"other_fee": 20000,
+"fee_paid_in_comedk": 15000,
+"university_fee_payable_at_college": 10610,
+"total_fee": 67866
+}
+],
+"management_quota_fees_per_year": [
+{ "sl_no": 1, "course": "Civil Engineering", "fees_per_year": 140000 },
+{ "sl_no": 2, "course": "Mechanical Engineering", "fees_per_year": 140000 },
+{ "sl_no": 3, "course": "Electrical & Electronics Engineering", "fees_per_year": 170000 },
+{ "sl_no": 4, "course": "Electronics & Communication Engineering", "fees_per_year": 170000 },
+{ "sl_no": 5, "course": "Industrial and Production Engineering", "fees_per_year": 140000 },
+{ "sl_no": 6, "course": "Electronics & Instrumentation Engineering", "fees_per_year": 140000 },
+{ "sl_no": 7, "course": "Computer Science Engineering", "fees_per_year": 250000 },
+{ "sl_no": 8, "course": "Computer Science and Design", "fees_per_year": 200000 },
+{ "sl_no": 9, "course": "Cement and Ceramic Technology", "fees_per_year": 140000 },
+{ "sl_no": 10, "course": "Information Science Engineering", "fees_per_year": 200000 },
+{ "sl_no": 11, "course": "Artificial Intelligence and Machine Learning", "fees_per_year": 250000 },
+{ "sl_no": 12, "course": "Artificial Intelligence (AI) and Data Science", "fees_per_year": 250000 }
+],
+"comedk_fee_structure": [
+{
+"sl_no": 1,
+"course": "Civil Engineering",
+"tuition_fee": 80000,
+"other_fee": 20000,
+"fee_paid_in_comedk": 100000,
+"university_fee_payable_at_college": 10610,
+"total_fee": 110610
+},
+{
+"sl_no": 2,
+"course": "Mechanical Engineering",
+"tuition_fee": 80000,
+"other_fee": 20000,
+"fee_paid_in_comedk": 100000,
+"university_fee_payable_at_college": 10610,
+"total_fee": 110610
+},
+{
+"sl_no": 3,
+"course": "Electrical & Electronics Engineering",
+"tuition_fee": 186000,
+"other_fee": 20000,
+"fee_paid_in_comedk": 206000,
+"university_fee_payable_at_college": 10610,
+"total_fee": 216610
+},
+{
+"sl_no": 4,
+"course": "Electronics & Communication Engineering",
+"tuition_fee": 186000,
+"other_fee": 20000,
+"fee_paid_in_comedk": 206000,
+"university_fee_payable_at_college": 10610,
+"total_fee": 216610
+},
+{
+"sl_no": 5,
+"course": "Industrial and Production Engineering",
+"tuition_fee": 80000,
+"other_fee": 20000,
+"fee_paid_in_comedk": 100000,
+"university_fee_payable_at_college": 10610,
+"total_fee": 110610
+},
+{
+"sl_no": 6,
+"course": "Electronics & Instrumentation Engineering",
+"tuition_fee": 80000,
+"other_fee": 20000,
+"fee_paid_in_comedk": 100000,
+"university_fee_payable_at_college": 10610,
+"total_fee": 110610
+},
+{
+"sl_no": 7,
+"course": "Computer Science Engineering",
+"tuition_fee": 186000,
+"other_fee": 20000,
+"fee_paid_in_comedk": 206000,
+"university_fee_payable_at_college": 10610,
+"total_fee": 216610
+},
+{
+"sl_no": 8,
+"course": "Computer Science and Design",
+"tuition_fee": 186000,
+"other_fee": 20000,
+"fee_paid_in_comedk": 206000,
+"university_fee_payable_at_college": 10610,
+"total_fee": 216610
+},
+{
+"sl_no": 9,
+"course": "Cement and Ceramic Technology",
+"tuition_fee": 80000,
+"other_fee": 20000,
+"fee_paid_in_comedk": 100000,
+"university_fee_payable_at_college": 10610,
+"total_fee": 110610
+},
+{
+"sl_no": 10,
+"course": "Information Science Engineering",
+"tuition_fee": 186000,
+"other_fee": 20000,
+"fee_paid_in_comedk": 206000,
+"university_fee_payable_at_college": 10610,
+"total_fee": 216610
+},
+{
+"sl_no": 11,
+"course": "Artificial Intelligence and Machine Learning",
+"tuition_fee": 186000,
+"other_fee": 20000,
+"fee_paid_in_comedk": 206000,
+"university_fee_payable_at_college": 10610,
+"total_fee": 216610
+}
+],
+"notes": {
+"university_fee_karnataka": 10610,
+"university_fee_non_karnataka": 12110,
+"university_fee_foreign": 22110
+}
+}
+}
