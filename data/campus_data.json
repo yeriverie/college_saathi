@@ -1,0 +1,102 @@
+{
+  "institution": "P.D.A. College of Engineering",
+  "website": "pdacek.ac.in",
+  "portals": {
+    "results": "https://pda-results.contineo.in/index.php",
+    "general_webfiles": "https://pda-students.contineo.in/webfiles/",
+    "terms": {
+      "odd_semester": "https://pda-students.contineo.in/parents/",
+      "even_semester": "https://pda-students.contineo.in/parentseven/index.php",
+      "summer_term": "https://pda-students.contineo.in/parentssummer/index.php"
+    }
+  },
+  "exams": [
+    {
+      "semester": "V Semester AI & ML",
+      "subject": "Data Science & Its Applications",
+      "code": "22AI51",
+      "date": "29/10/2026",
+      "session": "11:30 AM to 12:45 PM"
+    },
+    {
+      "semester": "V Semester AI & ML",
+      "subject": "Database Management System",
+      "code": "22AI52",
+      "date": "29/10/2026",
+      "session": "04:00 PM to 05:15 PM"
+    },
+    {
+      "semester": "V Semester AI & ML",
+      "subject": "Principles of Machine Learning",
+      "code": "22AI53",
+      "date": "30/10/2026",
+      "session": "11:30 AM to 12:45 PM"
+    },
+    {
+      "semester": "V Semester AI & ML",
+      "subject": "Human Computer Interface",
+      "code": "22AI55A",
+      "date": "30/10/2026",
+      "session": "04:00 PM to 05:15 PM"
+    },
+    {
+      "semester": "V Semester AI & ML",
+      "subject": "Research Methodology and IPR",
+      "code": "22RM157",
+      "date": "31/10/2026",
+      "session": "11:30 AM to 12:45 PM"
+    },
+    {
+      "semester": "V Semester AI & ML",
+      "subject": "Environmental Studies",
+      "code": "22ES58",
+      "date": "31/10/2026",
+      "session": "04:00 PM to 05:15 PM"
+    }
+  ],
+  "fee_structure": {
+    "management_quota_fees_per_year": [
+      {
+        "course": "Artificial Intelligence and Machine Learning (AIML)",
+        "fees_per_year": 250000
+      },
+      {
+        "course": "Computer Science Engineering (CSE)",
+        "fees_per_year": 250000
+      }
+    ],
+    "comedk_fee_structure": [
+      {
+        "course": "Artificial Intelligence and Machine Learning (AIML)",
+        "tuition_fee": 186000,
+        "other_fee": 20000,
+        "university_fee_payable_at_college": 10610,
+        "total_fee": 216610
+      },
+      {
+        "course": "Computer Science Engineering (CSE)",
+        "tuition_fee": 186000,
+        "other_fee": 20000,
+        "university_fee_payable_at_college": 10610,
+        "total_fee": 216610
+      }
+    ]
+  },
+  "syllabus": {
+    "aiml": [
+      "Data Science & Its Applications (22AI51)",
+      "Database Management System (22AI52)",
+      "Principles of Machine Learning (22AI53)",
+      "Human Computer Interface (22AI55A)",
+      "Research Methodology and IPR (22RM157)",
+      "Environmental Studies (22ES58)"
+    ],
+    "cse": [
+      "Data Structures & Algorithms",
+      "Design & Analysis of Algorithms",
+      "Operating Systems",
+      "Computer Networks",
+      "Database Management Systems"
+    ]
+  }
+}
